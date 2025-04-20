@@ -7,3 +7,7 @@ diff:
 
 destroy:
 	cd infra && cdk destroy --profile $(AWS_PROFILE)
+
+fe-build:
+	cd frontend && npm run build
+
