@@ -1,0 +1,24 @@
+type Deck {
+  id: ID!
+  name: String!
+  owner: String!
+}
+
+type Card {
+  id: ID!
+  deckId: ID!
+  question: String!
+  answer: String!
+  nextReview: String!
+}
+
+type Query {
+  listCards(deckId: ID!): [Card!]!
+  listDecks(owner: String!): [Deck!]!
+}
+
+type Mutation {
+  createDeck(name: String!): Deck!
+  createCard(deckId: ID!, question: String!, answer: String!): Card!
+  recordReiew(cardId: ID!, result: String!): Card!
+}
