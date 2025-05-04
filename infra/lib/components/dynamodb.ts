@@ -8,7 +8,8 @@ export class DynamodbConstruct extends Construct {
   constructor(scope: Construct, id: string, props: EnvProps) {
     super(scope, id);
 
-    this.table = new ddb.Table(this, "Table", {
+    this.table = new ddb.Table(this, `Table-${props.stackNameSuffix}`, {
+      tableName: `FlashCardApp-${props.stackNameSuffix}-Table`,
       partitionKey: { name: "pk", type: ddb.AttributeType.STRING },
       sortKey: { name: "sk", type: ddb.AttributeType.STRING },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
