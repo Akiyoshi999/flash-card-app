@@ -1,0 +1,6 @@
+#set($deckId = $ctx.result.sk.split("#")[1])
+{
+  "id": $util.toJson($deckId),
+  "name": $util.toJson($ctx.result.name),
+  "owner": $util.toJson($ctx.result.owner)
+}

@@ -1,7 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { DynamodbConstruct } from "./components/dynamodb";
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { AppsyncConstruct } from "./components/appsync";
+import { CognitoConstruct } from "./components/cognito";
 
 interface InfraStackProps extends cdk.StackProps {
   stackNameSuffix: string;
@@ -13,8 +14,18 @@ export class InfraStack extends cdk.Stack {
 
     const stackNameSuffix = props.stackNameSuffix;
 
+    const cognito = new CognitoConstruct(this, `Cognito-${stackNameSuffix}`, {
+      stackNameSuffix,
+    });
+
     const ddb = new DynamodbConstruct(this, `DynamoDB-${stackNameSuffix}`, {
       stackNameSuffix,
+    });
+
+    const appsync = new AppsyncConstruct(this, `Appsync-${stackNameSuffix}`, {
+      stackNameSuffix,
+      table: ddb.table,
+      userPool: cognito.userPool,
     });
   }
 }
