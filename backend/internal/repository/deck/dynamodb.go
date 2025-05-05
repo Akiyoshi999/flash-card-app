@@ -2,6 +2,8 @@ package deck
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	"backend/proto/protobuf"
 
@@ -110,13 +112,26 @@ func (r *DynamoRepository) Update(ctx context.Context, deck *protobuf.Deck) erro
 }
 
 // Delete は指定された Deck を削除します。
-func (r *DynamoRepository) Delete(ctx context.Context, id, owner string) error {
-	_, err := r.client.DeleteItem(ctx, &dynamodb.DeleteItemInput{
+func (r *DynamoRepository) Delete(ctx context.Context,id, owner string) error {
+	result, err := r.client.DeleteItem(ctx, &dynamodb.DeleteItemInput{
 		TableName: aws.String(r.tableName),
 		Key: map[string]types.AttributeValue{
 			"pk": &types.AttributeValueMemberS{Value: "USER#" + owner},
 			"sk": &types.AttributeValueMemberS{Value: "DECK#" + id},
 		},
+		ReturnValues: types.ReturnValueAllOld,
 	})
+	if err != nil {
 	return err
+	}
+
+	fmt.Println("result", result)
+
+	if len(result.Attributes) > 0 {
+		// 削除成功
+		return nil
+	} else {
+		// 削除失敗
+		return errors.New("deck not found")
+	}
 } 

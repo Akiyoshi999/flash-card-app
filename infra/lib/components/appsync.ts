@@ -19,6 +19,7 @@ export class AppsyncConstruct extends Construct {
 
     const { bffFunction } = props;
 
+    // スキーマを定義
     this.api = new appsync.GraphqlApi(
       this,
       `Appsync-${props.stackNameSuffix}`,
@@ -26,7 +27,7 @@ export class AppsyncConstruct extends Construct {
         name: `FlashCardApp-${props.stackNameSuffix}-API`,
         definition: appsync.Definition.fromSchema(
           appsync.SchemaFile.fromAsset(
-            path.join(__dirname, "../../../backend/appsync/schema.graphql")
+            path.join(__dirname, "../../schema/schema.graphql")
           )
         ),
         authorizationConfig: {
@@ -50,11 +51,7 @@ export class AppsyncConstruct extends Construct {
       bffFunction
     );
 
-    const dataSource = this.api.addDynamoDbDataSource(
-      `DynamoDB-${props.stackNameSuffix}`,
-      props.table
-    );
-
+    // createDeckリゾルバを作成
     this.api.createResolver("createDeck", {
       typeName: "Mutation",
       fieldName: "createDeck",
@@ -62,13 +59,32 @@ export class AppsyncConstruct extends Construct {
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
         path.join(
           __dirname,
-          "../../../backend/appsync/Deck/Mutation/createDeck.req.vtl"
+          "../../appsync-vtl/Deck/Mutation/createDeck/req.vtl"
         )
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromFile(
         path.join(
           __dirname,
-          "../../../backend/appsync/Deck/Mutation/createDeck.res.vtl"
+          "../../appsync-vtl/Deck/Mutation/createDeck/res.vtl"
+        )
+      ),
+    });
+
+    // deleteDeckリゾルバを作成
+    this.api.createResolver("deleteDeck", {
+      typeName: "Mutation",
+      fieldName: "deleteDeck",
+      dataSource: lambdaDataSource,
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(
+          __dirname,
+          "../../appsync-vtl/Deck/Mutation/deleteDeck/req.vtl"
+        )
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(
+          __dirname,
+          "../../appsync-vtl/Deck/Mutation/deleteDeck/res.vtl"
         )
       ),
     });

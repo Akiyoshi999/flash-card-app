@@ -21,6 +21,7 @@ func NewDeckService(repo *deck.DynamoRepository) *DeckService {
 	}
 }
 
+// CreateDeck は新しいデッキを作成します。
 func (s *DeckService) CreateDeck(ctx context.Context, req *protobuf.CreateDeckRequest) (*protobuf.Deck, error) {
 	deck := &protobuf.Deck{
 		DeckId:    uuid.New().String(),
