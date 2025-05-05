@@ -19,6 +19,7 @@ type Query {
 
 type Mutation {
   createDeck(name: String!): Deck!
+  deleteDeck(deckId: ID!): Boolean!
   createCard(deckId: ID!, question: String!, answer: String!): Card!
   recordReiew(cardId: ID!, result: String!): Card!
 }

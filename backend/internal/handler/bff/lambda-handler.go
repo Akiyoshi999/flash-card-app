@@ -97,6 +97,7 @@ func HandleRequest(ctx context.Context, request Request) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println("resp", resp)
 		return resp, nil
 
 	default:

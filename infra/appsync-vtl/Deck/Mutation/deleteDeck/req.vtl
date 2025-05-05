@@ -1,0 +1,13 @@
+#set($userId = $ctx.identity.claims.sub)
+
+{
+  "version": "2018-05-29",
+  "operation": "Invoke",
+  "payload": {
+    "operation": "DeleteDeck",
+    "data": {
+      "deckId": $util.toJson($ctx.args.deckId),
+      "owner": $util.toJson($userId)
+    }
+  }
+}
