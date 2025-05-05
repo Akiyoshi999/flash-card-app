@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package deck;
+
+option go_package = "backend/proto/protobuf;protobuf";
+
+// Deck represents a flash card deck
+message Deck {
+  string deckId = 1;
+  string name = 2;
+  string owner = 3;
+  string createdAt = 4;
+}
+
+// CreateDeckRequest represents a request to create a new deck
+message CreateDeckRequest {
+  string name = 1;
+  string owner = 2;
+}
+
+// CreateDeckResponse represents a response for deck creation
+message CreateDeckResponse {
+}
+
+// GetDeckRequest represents a request to get a deck
+message GetDeckRequest {
+  string deckId = 1;
+  string owner = 2;
+}
+
+// GetDeckResponse represents a response for getting a deck
+message GetDeckResponse {
+  Deck deck = 1;
+}
+
+// ListDecksRequest represents a request to list decks
+message ListDecksRequest {
+  string owner = 1;
+}
+
+// ListDecksResponse represents a response for listing decks
+message ListDecksResponse {
+  repeated Deck decks = 1;
+}
+
+// UpdateDeckRequest represents a request to update a deck
+message UpdateDeckRequest {
+  string deckId = 1;
+  string name = 2;
+  string owner = 3;
+}
+
+// UpdateDeckResponse represents a response for updating a deck
+message UpdateDeckResponse {
+  Deck deck = 1;
+}
+
+// DeleteDeckRequest represents a request to delete a deck
+message DeleteDeckRequest {
+  string deckId = 1;
+  string owner = 2;
+}
+
+// DeleteDeckResponse represents a response for deleting a deck
+message DeleteDeckResponse {
+  bool success = 1;
+}
+
+// DeckService defines the deck service interface
+service DeckService {
+  rpc CreateDeck(CreateDeckRequest) returns (Deck);
+  rpc GetDeck(GetDeckRequest) returns (Deck);
+  rpc ListDecks(ListDecksRequest) returns (ListDecksResponse);
+  rpc UpdateDeck(UpdateDeckRequest) returns (Deck);
+  rpc DeleteDeck(DeleteDeckRequest) returns (DeleteDeckResponse);
+} 

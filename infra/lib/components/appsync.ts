@@ -4,15 +4,20 @@ import { EnvProps } from "../type";
 import * as path from "path";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as cognito from "aws-cdk-lib/aws-cognito";
+import { GoFunction } from "@aws-cdk/aws-lambda-go-alpha";
+
 interface AppsyncConstructProps extends EnvProps {
   table: dynamodb.Table;
   userPool: cognito.UserPool;
+  bffFunction: GoFunction;
 }
 
 export class AppsyncConstruct extends Construct {
   public readonly api: appsync.GraphqlApi;
   constructor(scope: Construct, id: string, props: AppsyncConstructProps) {
     super(scope, id);
+
+    const { bffFunction } = props;
 
     this.api = new appsync.GraphqlApi(
       this,
@@ -40,6 +45,11 @@ export class AppsyncConstruct extends Construct {
       }
     );
 
+    const lambdaDataSource = this.api.addLambdaDataSource(
+      `Lambda-${props.stackNameSuffix}`,
+      bffFunction
+    );
+
     const dataSource = this.api.addDynamoDbDataSource(
       `DynamoDB-${props.stackNameSuffix}`,
       props.table
@@ -48,7 +58,7 @@ export class AppsyncConstruct extends Construct {
     this.api.createResolver("createDeck", {
       typeName: "Mutation",
       fieldName: "createDeck",
-      dataSource: dataSource,
+      dataSource: lambdaDataSource,
       requestMappingTemplate: appsync.MappingTemplate.fromFile(
         path.join(
           __dirname,

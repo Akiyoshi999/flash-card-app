@@ -1,16 +1,13 @@
 #set($userId = $ctx.identity.claims.sub)
-#set($deckId = $util.autoId())
 
 {
-  "version": "2017-02-28",
-  "operation": "PutItem",
-  "key": {
-    "pk": $util.dynamodb.toDynamoDBJson("USER#$userId"),
-    "sk": $util.dynamodb.toDynamoDBJson("DECK#$deckId")
-  },
-  "attributeValues": {
-    "name": $util.dynamodb.toDynamoDBJson($ctx.args.name),
-    "owner": $util.dynamodb.toDynamoDBJson($userId),
-    "createdAt": $util.dynamodb.toDynamoDBJson($util.time.nowISO8601())
+  "version": "2018-05-29",
+  "operation": "Invoke",
+  "payload": {
+    "operation": "CreateDeck",
+    "data": {
+      "name": $util.toJson($ctx.args.name),
+      "owner": $util.toJson($userId)
+    }
   }
 }
