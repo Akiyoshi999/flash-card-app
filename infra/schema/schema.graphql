@@ -15,6 +15,7 @@ type Card {
 type Query {
   listCards(deckId: ID!): [Card!]!
   listDecks(owner: String!): [Deck!]!
+  getDeck(deckId: ID!): Deck!
 }
 
 type Mutation {

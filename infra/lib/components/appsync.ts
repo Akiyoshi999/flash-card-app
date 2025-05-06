@@ -88,5 +88,18 @@ export class AppsyncConstruct extends Construct {
         )
       ),
     });
+
+    // getDeckリゾルバを作成
+    this.api.createResolver("getDeck", {
+      typeName: "Query",
+      fieldName: "getDeck",
+      dataSource: lambdaDataSource,
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(__dirname, "../../appsync-vtl/Deck/Query/getDeck/req.vtl")
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(__dirname, "../../appsync-vtl/Deck/Query/getDeck/res.vtl")
+      ),
+    });
   }
 }
