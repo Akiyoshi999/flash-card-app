@@ -101,5 +101,18 @@ export class AppsyncConstruct extends Construct {
         path.join(__dirname, "../../appsync-vtl/Deck/Query/getDeck/res.vtl")
       ),
     });
+
+    // listDecksリゾルバを作成
+    this.api.createResolver("listDecks", {
+      typeName: "Query",
+      fieldName: "listDecks",
+      dataSource: lambdaDataSource,
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(__dirname, "../../appsync-vtl/Deck/Query/listDecks/req.vtl")
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(__dirname, "../../appsync-vtl/Deck/Query/listDecks/res.vtl")
+      ),
+    });
   }
 }

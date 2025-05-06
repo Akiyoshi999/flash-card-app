@@ -79,6 +79,9 @@ func (r *DynamoRepository) List(ctx context.Context, owner string) ([]*protobuf.
 	if err != nil {
 		return nil, err
 	}
+	if len(result.Items) == 0 {
+		return nil, errors.New("no decks found")
+	}
 
 	decks := make([]*protobuf.Deck, 0, len(result.Items))
 	for _, item := range result.Items {

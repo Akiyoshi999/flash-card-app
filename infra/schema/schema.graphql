@@ -14,7 +14,7 @@ type Card {
 
 type Query {
   listCards(deckId: ID!): [Card!]!
-  listDecks(owner: String!): [Deck!]!
+  listDecks: [Deck!]!
   getDeck(deckId: ID!): Deck!
 }
 
