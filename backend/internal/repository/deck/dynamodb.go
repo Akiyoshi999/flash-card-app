@@ -42,6 +42,7 @@ func (r *DynamoRepository) Create(ctx context.Context, deck *protobuf.Deck) erro
 
 // Get は指定された Deck を取得します。
 func (r *DynamoRepository) Get(ctx context.Context, id, owner string) (*protobuf.Deck, error) {
+	fmt.Printf("id: %s, owner: %s\n", id, owner)
 	result, err := r.client.GetItem(ctx, &dynamodb.GetItemInput{
 		TableName: aws.String(r.tableName),
 		Key: map[string]types.AttributeValue{
@@ -54,7 +55,7 @@ func (r *DynamoRepository) Get(ctx context.Context, id, owner string) (*protobuf
 	}
 
 	if result.Item == nil {
-		return nil, nil
+		return nil, errors.New("deck not found")
 	}
 
 	return &protobuf.Deck{

@@ -26,7 +26,7 @@ type Response struct {
 }
 
 func HandleRequest(ctx context.Context, request Request) (interface{}, error) {
-	fmt.Println("request", request)
+	fmt.Printf("request: %+v, operation: %s\n", string(request.Data), request.Operation)
 	// Initialize AWS SDK
 	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
