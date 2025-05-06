@@ -70,6 +70,25 @@ export class AppsyncConstruct extends Construct {
       ),
     });
 
+    // updateDeckリゾルバを作成
+    this.api.createResolver("updateDeck", {
+      typeName: "Mutation",
+      fieldName: "updateDeck",
+      dataSource: lambdaDataSource,
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(
+          __dirname,
+          "../../appsync-vtl/Deck/Mutation/updateDeck/req.vtl"
+        )
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.fromFile(
+        path.join(
+          __dirname,
+          "../../appsync-vtl/Deck/Mutation/updateDeck/res.vtl"
+        )
+      ),
+    });
+
     // deleteDeckリゾルバを作成
     this.api.createResolver("deleteDeck", {
       typeName: "Mutation",
